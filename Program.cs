@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace CryptSindresorhusConf
@@ -19,8 +18,7 @@ namespace CryptSindresorhusConf
             string decrypted = Conf.DecryptFile(key, filename);
             Debug.Assert(decrypted == data);
 
-            byte[] iv = Aes.Create().IV;
-            Conf conf = new(key, iv);
+            Conf conf = new(key);
 
             // Encrypt
             byte[] encrypted = conf.Encrypt(data);

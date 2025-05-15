@@ -8,17 +8,19 @@ public class Conf
 {
     readonly Aes aes;
 
-    public Conf(byte[] key, byte[] iv)
+    public Conf(byte[] key, byte[]? iv = null)
     {
         aes = Aes.Create();
 
         Debug.Print("Key:      {0}", BitConverter.ToString(key));
 
-        aes.IV = iv;
-        Debug.Print("IV:       {0}", BitConverter.ToString(iv));
+        if (iv is not null)
+            aes.IV = iv;
+
+        Debug.Print("IV:       {0}", BitConverter.ToString(aes.IV));
 
         // Wow!
-        byte[] salt = Encoding.Default.GetBytes(Encoding.UTF8.GetString(iv));
+        byte[] salt = Encoding.Default.GetBytes(Encoding.UTF8.GetString(aes.IV));
         Debug.Print("Salt:     {0}", BitConverter.ToString(salt));
 
         byte[] password = Rfc2898DeriveBytes.Pbkdf2(key, salt, 10_000, HashAlgorithmName.SHA512, 32);
